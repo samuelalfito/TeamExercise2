@@ -19,6 +19,8 @@ fun TodoScreen(vm: TodoViewModel = viewModel()) {
     val filter by vm.filter.collectAsState()
     var text by rememberSaveable { mutableStateOf("") }
     var searchText by rememberSaveable { mutableStateOf("") }
+    val activeCount = todos.count { !it.isDone }
+    val completedCount = todos.count { it.isDone }
 
     Column(Modifier.padding(16.dp)) {
         val tabs = listOf(TodoFilter.ALL to "Semua", TodoFilter.ACTIVE to "Aktif", TodoFilter.COMPLETED to "Selesai")
@@ -57,6 +59,8 @@ fun TodoScreen(vm: TodoViewModel = viewModel()) {
         ) { Text("Tambah") }
 
         Divider()
+        
+        Text("Aktif: $activeCount | Selesai: $completedCount", modifier = Modifier.padding(vertical = 8.dp))
 
         LazyColumn {
             items(todos.filter { it.title.contains(searchText, ignoreCase = true) }) { todo ->
